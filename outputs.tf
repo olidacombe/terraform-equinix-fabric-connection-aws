@@ -10,32 +10,27 @@ output "fabric_connection_name" {
 
 output "fabric_connection_status" {
   description = "Connection provisioning status."
-  value       = module.equinix-fabric-connection.primary_connection.status
+  value       = one(module.equinix-fabric-connection.primary_connection.operation).equinix_status
 }
 
 output "fabric_connection_provider_status" {
   description = "Connection provisioning provider status."
-  value       = module.equinix-fabric-connection.primary_connection.provider_status
+  value       = one(module.equinix-fabric-connection.primary_connection.operation).provider_status
 }
 
 output "fabric_connection_speed" {
-  description = "Connection speed."
-  value       = module.equinix-fabric-connection.primary_connection.speed
-}
-
-output "fabric_connection_speed_unit" {
-  description = "Connection speed unit."
-  value       = module.equinix-fabric-connection.primary_connection.speed_unit
+  description = "Connection speed in Mbps."
+  value       = module.equinix-fabric-connection.primary_connection.bandwidth
 }
 
 output "fabric_connection_seller_metro" {
   description = "Connection seller metro code."
-  value       = module.equinix-fabric-connection.primary_connection.seller_metro_code
+  value       = one(one(one(module.equinix-fabric-connection.primary_connection.z_side).access_point).location).metro_code
 }
 
 output "fabric_connection_seller_region" {
   description = "Connection seller region."
-  value       = module.equinix-fabric-connection.primary_connection.seller_region
+  value       = one(one(module.equinix-fabric-connection.primary_connection.z_side).access_point).seller_region
 }
 
 output "network_edge_bgp_state" {
@@ -67,3 +62,8 @@ output "aws_vif_id" {
   description = "AWS Private Virtual Interface ID."
   value       = try(aws_dx_private_virtual_interface.this[0].id, null)
 }
+
+output "primary_connection_raw" {
+        description = "delete me"
+        value = module.equinix-fabric-connection.primary_connection
+    }

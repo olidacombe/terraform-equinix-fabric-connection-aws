@@ -1,8 +1,5 @@
 locals  {
-   aws_dx_id = one([
-       for action_data in one(module.equinix-fabric-connection.primary_connection.actions).required_data: action_data["value"]
-       if action_data["key"] == "awsConnectionId"
-   ])
+   aws_dx_id = one(one(module.equinix-fabric-connection.primary_connection.z_side).access_point).provider_connection_id
    aws_vgw_id = var.aws_dx_create_vgw ? aws_vpn_gateway.this[0].id : var.aws_dx_vgw_id
    aws_vpc_id = var.aws_dx_create_vgw ? data.aws_vpc.this[0].id : ""
    aws_region = data.aws_region.this.name
@@ -24,7 +21,7 @@ resource "random_string" "this" {
 
 module "equinix-fabric-connection" {
   source = "equinix-labs/fabric-connection/equinix"
-  version = "0.4.0"
+  version = "0.6.0"
 
   # required variables
   notification_users = var.fabric_notification_users
@@ -44,7 +41,6 @@ module "equinix-fabric-connection" {
   vlan_stag                 = var.fabric_vlan_stag
   service_token_id          = var.fabric_service_token_id
   speed                     = var.fabric_speed
-  speed_unit                = "MB"
   purchase_order_number    = var.fabric_purchase_order_number
 }
 
