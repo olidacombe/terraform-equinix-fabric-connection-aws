@@ -62,8 +62,3 @@ output "aws_vif_id" {
   description = "AWS Private Virtual Interface ID."
   value       = try(aws_dx_private_virtual_interface.this[0].id, null)
 }
-
-output "primary_connection_raw" {
-        description = "delete me"
-        value = module.equinix-fabric-connection.primary_connection
-    }
